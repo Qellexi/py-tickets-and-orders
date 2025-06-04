@@ -1,7 +1,7 @@
+from db.models import Order, User, Ticket
 from django.db import transaction
 from django.db.models import QuerySet
 
-from db.models import Order, User, Ticket
 
 def create_order(
   tickets: list[dict],
