@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.db.models import UniqueConstraint
+from django.conf import settings
+from django.core.exceptions import ValidationError
 
 
 class Genre(models.Model):
@@ -26,7 +28,7 @@ class Movie(models.Model):
 
     class Meta:
         indexes = [
-            models.Index(field=["title"]),
+            models.Index(fields=["title"]),
         ]
     
     def __str__(self) -> str:
@@ -65,7 +67,7 @@ class Order(models.Model):
     class Meta:
         ordering = ["-created_at"] #desc
     def __str__(self) -> str:
-        return f"{Order: self.created_at}"
+        return f"Order: {self.created_at}"
 
 
 class Ticket(models.Model):
@@ -80,9 +82,9 @@ class Ticket(models.Model):
         ]
     def clean(self):
         if not (1 <= self.seat <= self.movie_session.cinema_hall.seats_in_row):
-            raise ValidationError({"seat": f"seat must be in range (1, {self.self.movie_session.cinema_hall.seats_in_row}), not {self.seat}"}")
+            raise ValidationError({"seat": f"seat must be in range (1, {self.movie_session.cinema_hall.seats_in_row}), not {self.seat}"})
         if not (1 <= self.row <= self.movie_session.cinema_hall.rows):
-            raise ValidationError({"row": f"row must be in range (1, {self.self.movie_session.cinema_hall.rows}), not {self.row}"}")
+            raise ValidationError({"row": f"row must be in range (1, {self.movie_session.cinema_hall.rows}), not {self.row}"})
             
     def save(self, *args, **kwargs):
         self.full_clean()
