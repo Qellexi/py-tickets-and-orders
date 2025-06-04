@@ -11,11 +11,11 @@ def create_user(
 ) -> None:
   create_fields = {}
   if email:
-      update_fields["email"] = email
+      create_fields["email"] = email
   if first_name:
-      update_fields["first_name"] = first_name
+      create_fields["first_name"] = first_name
   if last_name:
-      update_fields["last_name"] = last_name
+      create_fields["last_name"] = last_name
   user = User.objects.create_user(username, password, **create_fields)
   user.save()
 
